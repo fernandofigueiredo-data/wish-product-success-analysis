@@ -15,6 +15,8 @@ Uma empresa quer revender produtos no Wish e precisa saber onde investir: em qua
 
 **Definição de sucesso:** produto com **1.000 unidades vendidas ou mais** (a mediana da base). O critério usa unidades vendidas, e não faturamento, para que o preço não faça parte da definição do sucesso.
 
+Como o Wish mostra as vendas em faixas (10, 50, 100, 1.000, 5.000…), 362 produtos ficam exatamente em 1.000. Por isso o corte na mediana não divide a base ao meio: 847 produtos (63%) são sucesso e 494 (37%) não.
+
 ## Dados
 
 [Sales of summer clothes in E-commerce Wish](https://www.kaggle.com/datasets/jmmvutu/summer-products-and-sales-in-ecommerce-wish), de Jeffrey Mvutu Mabilama (licença CC BY 4.0). São os produtos que apareciam na busca por "summer" no Wish em agosto de 2020. Os preços estão em euros.
@@ -23,6 +25,7 @@ Uma empresa quer revender produtos no Wish e precisa saber onde investir: em qua
 - **Duplicatas:** 232 linhas eram o mesmo produto coletado duas vezes e foram removidas (1.573 → 1.341 produtos).
 - **Nota padrão:** 35 produtos sem nenhuma avaliação apareciam com nota 5,0. A nota deles foi tratada como ausente.
 - **Valores ausentes:** os do banner de urgência foram tratados como "sem banner".
+- **Vendas abaixo de 10:** 12 produtos com 1 a 8 unidades foram agrupados na faixa de 10, a menor faixa que o site exibe. Isso não afeta a definição de sucesso.
 
 ## Etapas
 
@@ -72,6 +75,8 @@ O modelo prevê pouco: as variáveis do anúncio explicam pouco do sucesso de um
 - Um único recorte: busca "summer" em agosto de 2020.
 - As vendas são acumuladas e não há data de lançamento, então produtos mais antigos tiveram mais tempo para vender.
 - A nota do vendedor é medida depois das vendas e inclui as avaliações do próprio produto.
+- Os p-valores não têm correção para múltiplas comparações (foram feitos 9 testes). Os resultados com p perto de 0,05, como o desconto (p = 0,01) e o badge de envio rápido (p = 0,03), devem ser lidos com cautela.
+- p-valor pequeno não quer dizer efeito grande: na quantidade de tags, o teste dá p < 0,001 com a mediana igual nos dois grupos (17).
 - Associação não é causa: as recomendações são hipóteses a validar com testes.
 
 ## Como executar
@@ -95,9 +100,12 @@ Depois abra o notebook `notebooks/analise_de_vendas_wish.ipynb` e execute todas 
 │   └── analise_de_vendas_wish.ipynb
 ├── reports/figures/      # gráficos usados neste README
 ├── requirements.txt
+├── LICENSE
 └── README.md
 ```
 
 **Ferramentas:** Python, pandas, matplotlib, seaborn, SciPy, scikit-learn, SHAP, WordCloud.
 
 **Dados:** "Sales of summer clothes in E-commerce Wish", de Jeffrey Mvutu Mabilama, licenciado sob CC BY 4.0.
+
+**Licença:** código sob [MIT](LICENSE).
